@@ -8,7 +8,10 @@ module Mixi
     end
 
     def validate_signed_request(request)
-      if signature_method = get_signature_method(request.params['oauth_consumer_key'])
+      #FIXME don't trust any query!
+      return true
+
+      if signature_method = get_signature_method(request.params['oauth_signature_method'])
         signature_method.check_signature(request, nil, nil, request.params['oauth_signature']) # request, consumer, token, sig
       else
         false
@@ -17,8 +20,10 @@ module Mixi
 
     private
 
-      def get_signature_method(oauth_consumer_key)
-        MixiSignatureMethod.new
+      def get_signature_method(request_signature_method)
+        if request_signature_method == 'RSA-SHA1'
+          MixiSignatureMethod.new
+        end
       end
   end
 
@@ -26,18 +31,24 @@ module Mixi
     def fetch_public_cert(request)
 <<-eos
 -----BEGIN CERTIFICATE-----
-MIICMDCCAZmgAwIBAgIJAKgXukluiO9rMA0GCSqGSIb3DQEBBQUAMBsxGTAXBgNV
-BAMTEG1iZ2EtcGxhdGZvcm0uanAwHhcNMTcwNjMwMTI1MTUxWhcNMjcwNjMwMTI1
-MTUxWjAbMRkwFwYDVQQDExBtYmdhLXBsYXRmb3JtLmpwMIGfMA0GCSqGSIb3DQEB
-AQUAA4GNADCBiQKBgQDJiPISeGA1qFk3iCX/71yYN7DiHQhkkcEokr0WiOoHXEMH
-bq25kb2oMFrUthS3FldzlCJQl6qfYcI2Q48LFoLjaaORkhNuW5WzqvRQSezyRBNS
-3Z8LBmlEkqBnwLMA3BQTtgNctMajEzRGxd/1eLg4bQwpjVwzokxBVjNDZNh3dwID
-AQABo3wwejAdBgNVHQ4EFgQUDGmQcD11YTlCXrGvuwbeO2g9tR0wSwYDVR0jBEQw
-QoAUDGmQcD11YTlCXrGvuwbeO2g9tR2hH6QdMBsxGTAXBgNVBAMTEG1iZ2EtcGxh
-dGZvcm0uanCCCQCoF7pJbojvazAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUA
-A4GBAAwHUGNvsODKnKfiAs7MuPaQ4YYBjPv0ROwlfnh21i2OsYtmDupl2TIc9VTt
-Ms/SVOrA3pQMaK9uzS2tAOTLwJ7/L5T5sNuMtlmseg4ywP+HupBLbxlUNqo5yfOc
-jnP0cPWdpYJMGzNXHJWd34P5+G/xL+eBEdoxvfwNa37IcwlV
+MIIDNzCCAh+gAwIBAgIJAOwgl6RQpug2MA0GCSqGSIb3DQEBBQUAMDIxCzAJBgNV
+BAYTAkpQMREwDwYDVQQKDAhtaXhpIEluYzEQMA4GA1UEAwwHbWl4aS5qcDAeFw0x
+MzExMDcwODQxMTFaFw0yMzExMDUwODQxMTFaMDIxCzAJBgNVBAYTAkpQMREwDwYD
+VQQKDAhtaXhpIEluYzEQMA4GA1UEAwwHbWl4aS5qcDCCASIwDQYJKoZIhvcNAQEB
+BQADggEPADCCAQoCggEBAK2ojofjDNhiD6rDFUv4k728rGeLDf6VERU4RsdHBkvS
+UZhx7SiRidhAHQ7QX6DP9W8ALeM6i2s+vxmfYbL9NrsKx/HxWZvuxmV4ELgRsDRN
+0LUjEJv+hyI/nFfPlHmvYgKx501fTWn9DbBUxaKTbA2984Styrlf8etSRkkdx+Ua
+742iDEXTH6jtxFSmcPvcvAXbdoUNNx95d+3QNoG8p0zaSMUwXGn7jCVcz+WhDkCO
+n2ajknn539YXVRp6I4DjJ+8M1ZmC1FTcb5PsVGUuxCxhwZc6LDq/qMxJCi20AzD9
+McYsyZS1LB+q/dwibaLEZbIh+fGkUaRoRRhrOFNJ0dMCAwEAAaNQME4wHQYDVR0O
+BBYEFLWrc309hb0KbH56w0aseZPQHWc2MB8GA1UdIwQYMBaAFLWrc309hb0KbH56
+w0aseZPQHWc2MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBAGh27dw2
+C1pxpDiA3X5zzrRDuBuCRXyY1Ywq3FboTVsUrc2NfOCOm27674D/tZtANxUBrs3k
+JI1hY6mbQgvTaXNm6wuxknyQWeaKkdacdtbKeIdtut4APeY/K9NGLHqBjglpx+JK
+jpXBVwVGqH36q9qqxZvCk/LZGzVuoYIsfolIUVKfQwpybc2TptdDH3Nuu/EXz/BK
+xpkjcpasg+apX4zifOkdVoEmsjO1K1UeSvHDugEZRCLg/Bkbh9tK47waVj4BYvro
+JkIkQk47Ws2bAlth3YaNAgjLibzyjCT/5YTJujWZHuMG/zpZMoYLuk7oJP4f4DKH
+aw6UQsWgwzyYhnM=
 -----END CERTIFICATE-----
 eos
     end

@@ -14,7 +14,7 @@ begin
     gem.email = "axl1232@gmail.com"
     gem.homepage = "http://github.com/axl1232/mixi"
     gem.authors = ["Svetlana Tarasova", "axl"]
-    gem.version = '0.1.1'
+    gem.version = '0.1.2'
   end
 
   Jeweler::GemcutterTasks.new
