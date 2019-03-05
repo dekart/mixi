@@ -8,9 +8,6 @@ module Mixi
     end
 
     def validate_signed_request(request)
-      #FIXME don't trust any query!
-      return true
-
       if signature_method = get_signature_method(request.params['oauth_signature_method'])
         signature_method.check_signature(request, nil, nil, request.params['oauth_signature']) # request, consumer, token, sig
       else

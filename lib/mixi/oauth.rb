@@ -84,7 +84,7 @@ module Mixi
           key = encode(k)
           value = encode(v)
 
-          if key.blank? or value.blank?
+          if key.blank?
             nil
           else
             "#{ key }=#{ value }"
