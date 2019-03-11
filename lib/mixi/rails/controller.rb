@@ -26,7 +26,7 @@ module Mixi
           Mixi::Config.default
         end
 
-        # Accessor to current Yahoo Mobage user. Returns instance of Mixi::User
+        # Accessor to current Mixi user. Returns instance of Mixi::User
         def current_mixi_user
           @current_mixi_user ||= fetch_current_mixi_user
         end

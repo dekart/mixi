@@ -55,7 +55,17 @@ module Mixi
     end
 
     def uid
-      @options['opensocial_viewer_id']
+      unless @options['uid']
+        @options['uid'] = Redis.current.hget('users_relations', @options['opensocial_viewer_id'])
+
+        unless @options['uid']
+          Redis.current.hset('users_relations', @options['opensocial_viewer_id'], Redis.current.hlen('users_relations').to_i + 1)
+
+          @options['uid'] = Redis.current.hget('users_relations', @options['opensocial_viewer_id'])
+        end
+      end
+
+      @options['uid']
     end
   end
 end
